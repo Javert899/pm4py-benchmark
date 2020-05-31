@@ -18,6 +18,7 @@ from pm4py.algo.discovery.dfg.adapters.pandas import df_statistics as pd_dfg_dis
 from pm4py.statistics.attributes.pandas import get as pd_attributes_get
 from pm4py.statistics.performance_spectrum import factory as pspectrum
 from pm4py.algo.filtering.log.attributes import attributes_filter
+import numpy as np
 
 LOG_MODEL_REPOSITORY_URL = "http://www.alessandroberti.it/"
 A32F0N00_LOG = "a32f0n00.xes"
@@ -25,8 +26,13 @@ A32F0N00_NET = "a32f0n00.pnml"
 BPIC2017_OFFER_LOG = "bpic2017.xes.gz"
 ROADTRAFFIC_CSV_GZ = "rogz"
 
-DEBUG = True
-ENABLE_TESTS = False
+DEBUG = False
+ENABLE_TESTS = True
+
+
+def geo_mean_overflow(iterable):
+    a = np.log(iterable)
+    return np.exp(a.sum()/len(a))
 
 
 def decompress(gzipped_file):
@@ -85,17 +91,16 @@ if not os.path.exists(ROADTRAFFIC_CSV_GZ):
 a32f0n00_log = xes_importer.apply(A32F0N00_LOG)
 a32f0n00_net, a32f0n00_im, a32f0n00_fm = petri_importer.apply(A32F0N00_NET)
 
-T1 = [0.0, 1.0, 0.0]
-T2 = [0.0, 1.0, 0.0]
-T3 = [0.0, 1.0, 0.0]
-T4 = [0.0, 1.0, 0.0]
-T5 = [0.0, 1.0, 0.0]
-T6 = [0.0, 1.0, 0.0]
-T7 = [0.0, 1.0, 0.0]
-T8 = [0.0, 1.0, 0.0]
-T9 = [0.0, 1.0, 0.0]
-T10 = [0.0, 1.0, 0.0]
-T11 = [0.0, 1.0, 0.0]
+T1 = [0.0, 38.03, 0.0]
+T2 = [0.0, 3.03, 0.0]
+T3 = [0.0, 3.57, 0.0]
+T4 = [0.0, 20.50, 0.0]
+T5 = [0.0, 1.15, 0.0]
+T6 = [0.0, 1.06, 0.0]
+T7 = [0.0, 2.59, 0.0]
+T8 = [0.0, 1.07, 0.0]
+T9 = [0.0, 0.97, 0.0]
+T10 = [0.0, 3.69, 0.0]
 
 if DEBUG:
     if not os.path.exists("debug.csv"):
@@ -203,3 +208,6 @@ if DEBUG:
     F.write("%.4f;%.4f;%.4f;%.4f;%.4f;%.4f;%.4f;%.4f;%.4f;%.4f\n" % (
     T1[0], T2[0], T3[0], T4[0], T5[0], T6[0], T7[0], T8[0], T9[0], T10[0]))
     F.close()
+
+scores = [T1[2], T2[2], T3[2], T4[2], T5[2], T6[2], T7[2], T8[2], T9[2], T10[2]]
+print("\n\nSYNTHETIC SCORE: %d" % math.ceil(geo_mean_overflow(scores)))
