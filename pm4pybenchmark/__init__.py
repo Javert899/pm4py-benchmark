@@ -20,6 +20,15 @@ from pm4py.statistics.performance_spectrum import factory as pspectrum
 from pm4py.algo.filtering.log.attributes import attributes_filter
 import numpy as np
 
+
+__version__ = '0.1'
+__doc__ = "Process Mining for Python - Benchmark"
+__author__ = 'Alessandro Berti'
+__author_email__ = 'alessandro.berti89@gmail.com'
+__maintainer__ = 'Alessandro Berti'
+__maintainer_email__ = "alessandro.berti89@gmail.com"
+
+
 LOG_MODEL_REPOSITORY_URL = "http://www.alessandroberti.it/"
 A32F0N00_LOG = "a32f0n00.xes"
 A32F0N00_NET = "a32f0n00.pnml"
@@ -108,7 +117,7 @@ if DEBUG:
         F.write("T1;T2;T3;T4;T5;T6;T7;T8;T9;T10;T11;T12;T13;T14;T15;T16;T17;T18;T19;T20;T21;T22;T23;T24;T25\n")
         F.close()
 
-print("\nPM4Py-Benchmark version (PM4Py version: %s)\n\n" % (pm4py.__version__))
+print("\nPM4Py-Benchmark version %s (PM4Py version: %s)\n\n" % (__version__, pm4py.__version__))
 
 if ENABLE_TESTS:
     # TEST 1: import bpic2017.xes.gz
@@ -210,4 +219,4 @@ if DEBUG:
     F.close()
 
 scores = [T1[2], T2[2], T3[2], T4[2], T5[2], T6[2], T7[2], T8[2], T9[2], T10[2]]
-print("\n\nSYNTHETIC SCORE: %d" % math.ceil(geo_mean_overflow(scores)))
+print("\n\nSYNTHETIC SCORE: %d\n\n" % math.ceil(geo_mean_overflow(scores)))
