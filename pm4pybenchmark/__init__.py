@@ -6,6 +6,7 @@ LOG_MODEL_REPOSITORY_URL = "http://www.alessandroberti.it/"
 A32F0N00_LOG = "a32f0n00.xes"
 A32F0N00_NET = "a32f0n00.pnml"
 BPIC2017_OFFER_LOG = "bpic2017.xes.gz"
+ROADTRAFFIC_CSV_GZ = "roadtraffic.csv.gz"
 DEBUG = True
 
 if not os.path.exists(A32F0N00_LOG):
@@ -24,6 +25,18 @@ if not os.path.exists(BPIC2017_OFFER_LOG):
     print("downloading: "+BPIC2017_OFFER_LOG)
     r = requests.get(LOG_MODEL_REPOSITORY_URL+BPIC2017_OFFER_LOG)
     with open(BPIC2017_OFFER_LOG, 'wb') as f:
+        f.write(r.content)
+
+if not os.path.exists(BPIC2017_OFFER_LOG):
+    print("downloading: "+BPIC2017_OFFER_LOG)
+    r = requests.get(LOG_MODEL_REPOSITORY_URL+BPIC2017_OFFER_LOG)
+    with open(BPIC2017_OFFER_LOG, 'wb') as f:
+        f.write(r.content)
+
+if not os.path.exists(ROADTRAFFIC_CSV_GZ):
+    print("downloading: "+ROADTRAFFIC_CSV_GZ)
+    r = requests.get(LOG_MODEL_REPOSITORY_URL+ROADTRAFFIC_CSV_GZ)
+    with open(ROADTRAFFIC_CSV_GZ, 'wb') as f:
         f.write(r.content)
 
 if DEBUG:
