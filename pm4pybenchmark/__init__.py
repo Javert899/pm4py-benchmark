@@ -19,7 +19,6 @@ from pm4py.statistics.attributes.pandas import get as pd_attributes_get
 from pm4py.statistics.performance_spectrum import factory as pspectrum
 from pm4py.algo.filtering.log.attributes import attributes_filter
 
-
 LOG_MODEL_REPOSITORY_URL = "http://www.alessandroberti.it/"
 A32F0N00_LOG = "a32f0n00.xes"
 A32F0N00_NET = "a32f0n00.pnml"
@@ -99,13 +98,14 @@ T10 = [0.0, 1.0, 0.0]
 T11 = [0.0, 1.0, 0.0]
 
 if DEBUG:
-    F = open("debug.csv", "w")
-    F.write("T1;T2;T3;T4;T5;T6;T7;T8;T9;T10;T11;T12;T13;T14;T15;T16;T17;T18;T19;T20;T21;T22;T23;T24;T25\n")
-    F.close()
+    if not os.path.exists("debug.csv"):
+        F = open("debug.csv", "w")
+        F.write("T1;T2;T3;T4;T5;T6;T7;T8;T9;T10;T11;T12;T13;T14;T15;T16;T17;T18;T19;T20;T21;T22;T23;T24;T25\n")
+        F.close()
 
 print("\nPM4Py-Benchmark version (PM4Py version: %s)\n\n" % (pm4py.__version__))
 
-if True:
+if ENABLE_TESTS:
     # TEST 1: import bpic2017.xes.gz
     t0 = time.time()
     bpic2017_log = xes_importer.apply(BPIC2017_OFFER_LOG)
@@ -132,7 +132,7 @@ if ENABLE_TESTS:
     T3[0] = (t1 - t0)
     T3[2] = math.ceil(T3[1] / (T3[0] + 0.00000001) * 1000.0)
     print("TEST 3 - Applying token-based replay between A32F0N00 log and model - %.5f s (test score: %d)" % (
-    T3[0], T3[2]))
+        T3[0], T3[2]))
 
 if ENABLE_TESTS:
     # TEST 4: perform alignments between A32F0N00 log and model
@@ -180,7 +180,6 @@ if ENABLE_TESTS:
     T8[2] = math.ceil(T8[1] / (T8[0] + 0.00000001) * 1000.0)
     print("TEST 8 - Discover timeframe KDE from dataframe - %.5f s (test score: %d)" % (T8[0], T8[2]))
 
-
 if ENABLE_TESTS:
     # TEST 9: discover performance spectrum from dataframe
     t0 = time.time()
@@ -190,8 +189,7 @@ if ENABLE_TESTS:
     T9[2] = math.ceil(T9[1] / (T9[0] + 0.00000001) * 1000.0)
     print("TEST 9 - Discover peformance spectrum from dataframe - %.5f s (test score: %d)" % (T9[0], T9[2]))
 
-
-if True:
+if ENABLE_TESTS:
     # TEST 10: filter bpic2017 event log on event attributes
     t0 = time.time()
     new_log = attributes_filter.apply_events(bpic2017_log, ["O_Create Offer"])
@@ -200,3 +198,8 @@ if True:
     T10[2] = math.ceil(T10[1] / (T10[0] + 0.00000001) * 1000.0)
     print("TEST 10 - Filter bpic2017 event log on event attributes - %.5f s (test score: %d)" % (T10[0], T10[2]))
 
+if DEBUG:
+    F = open("debug.csv", "a")
+    F.write("%.4f;%.4f;%.4f;%.4f;%.4f;%.4f;%.4f;%.4f;%.4f;%.4f\n" % (
+    T1[0], T2[0], T3[0], T4[0], T5[0], T6[0], T7[0], T8[0], T9[0], T10[0]))
+    F.close()
