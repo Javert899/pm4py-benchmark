@@ -21,7 +21,7 @@ from pm4py.algo.filtering.log.attributes import attributes_filter
 import numpy as np
 
 
-__version__ = '0.1'
+__version__ = '0.1.1'
 __doc__ = "Process Mining for Python - Benchmark"
 __author__ = 'Alessandro Berti'
 __author_email__ = 'alessandro.berti89@gmail.com'
@@ -67,7 +67,7 @@ def decompress(gzipped_file):
     return fp.name
 
 
-if __name__ == "__main__":
+if __name__ == "pm4pybenchmark":
     if not os.path.exists(A32F0N00_LOG):
         print("downloading: " + A32F0N00_LOG)
         r = requests.get(LOG_MODEL_REPOSITORY_URL + A32F0N00_LOG)
