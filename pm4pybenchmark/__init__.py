@@ -16,6 +16,8 @@ from pm4py.simulation.playout import simulator as playout
 from pm4py.statistics.traces.pandas import case_statistics as pd_case_statistics
 from pm4py.algo.discovery.dfg.adapters.pandas import df_statistics as pd_dfg_discovery
 from pm4py.statistics.attributes.pandas import get as pd_attributes_get
+from pm4py.statistics.performance_spectrum import factory as pspectrum
+from pm4py.algo.filtering.log.attributes import attributes_filter
 
 
 LOG_MODEL_REPOSITORY_URL = "http://www.alessandroberti.it/"
@@ -92,6 +94,9 @@ T5 = [0.0, 1.0, 0.0]
 T6 = [0.0, 1.0, 0.0]
 T7 = [0.0, 1.0, 0.0]
 T8 = [0.0, 1.0, 0.0]
+T9 = [0.0, 1.0, 0.0]
+T10 = [0.0, 1.0, 0.0]
+T11 = [0.0, 1.0, 0.0]
 
 if DEBUG:
     F = open("debug.csv", "w")
@@ -100,17 +105,17 @@ if DEBUG:
 
 print("\nPM4Py-Benchmark version (PM4Py version: %s)\n\n" % (pm4py.__version__))
 
-if ENABLE_TESTS:
+if True:
     # TEST 1: import bpic2017.xes.gz
     t0 = time.time()
-    bpic2017_log = xes_importer.apply(A32F0N00_LOG)
+    bpic2017_log = xes_importer.apply(BPIC2017_OFFER_LOG)
     t1 = time.time()
     T1[0] = (t1 - t0)
     T1[2] = math.ceil(T1[1] / (T1[0] + 0.00000001) * 1000.0)
     gc.collect()
     print("TEST 1 - Importing bpic2017.xes.gz - %.5f s (test score: %d)" % (T1[0], T1[2]))
 
-if True:
+if ENABLE_TESTS:
     # TEST 2: import roadtraffic.csv.gz
     t0 = time.time()
     roadtraffic_df = csv_import_adapter.import_dataframe_from_path(decompress(ROADTRAFFIC_CSV_GZ))
@@ -166,7 +171,7 @@ if ENABLE_TESTS:
     T7[2] = math.ceil(T7[1] / (T7[0] + 0.00000001) * 1000.0)
     print("TEST 7 - Discover variants from Pandas dataframe - %.5f s (test score: %d)" % (T7[0], T7[2]))
 
-if True:
+if ENABLE_TESTS:
     # TEST 8: discover timeframe KDE rom dataframe
     t0 = time.time()
     pd_attributes_get.get_kde_date_attribute(roadtraffic_df, "time:timestamp")
@@ -174,3 +179,24 @@ if True:
     T8[0] = (t1 - t0)
     T8[2] = math.ceil(T8[1] / (T8[0] + 0.00000001) * 1000.0)
     print("TEST 8 - Discover timeframe KDE from dataframe - %.5f s (test score: %d)" % (T8[0], T8[2]))
+
+
+if ENABLE_TESTS:
+    # TEST 9: discover performance spectrum from dataframe
+    t0 = time.time()
+    pspectrum.apply(roadtraffic_df, ["Create Fine", "Send Fine"])
+    t1 = time.time()
+    T9[0] = (t1 - t0)
+    T9[2] = math.ceil(T9[1] / (T9[0] + 0.00000001) * 1000.0)
+    print("TEST 9 - Discover peformance spectrum from dataframe - %.5f s (test score: %d)" % (T9[0], T9[2]))
+
+
+if True:
+    # TEST 10: filter bpic2017 event log on event attributes
+    t0 = time.time()
+    new_log = attributes_filter.apply_events(bpic2017_log, ["O_Create Offer"])
+    t1 = time.time()
+    T10[0] = (t1 - t0)
+    T10[2] = math.ceil(T10[1] / (T10[0] + 0.00000001) * 1000.0)
+    print("TEST 10 - Filter bpic2017 event log on event attributes - %.5f s (test score: %d)" % (T10[0], T10[2]))
+
